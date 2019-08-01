@@ -9,7 +9,7 @@ object MowMain extends  App {
 
   val bounds = head.split(" ") // X , Y of Lawn
   // create new Lawn with head line data
-  var lawn = new Lawn(bounds(0).toDouble, bounds(1).toDouble)
+  val lawn = new Lawn(bounds(0).toDouble, bounds(1).toDouble)
 
   // Calculate nb of mowers from input file and add their on the lawn
   val nbMowers =  (file.size  - (file.size % 2)) / 2
@@ -31,17 +31,18 @@ object MowMain extends  App {
         val newPosition= new Position(x, y, lawn.width, lawn.height)
         mower._1.direction= Direction.withName(commandList(2))
         mower._1.position.move(newPosition.abscissa, newPosition.ordinate)
-        mower._1.history.::(mower._1.position, mower._1.direction)
-
-      }else commandList.map(rotationTask => {
-        val rotation = RotationEnum.withName(rotationTask)
-        mower._1.rotate(rotation)
-        println("New state => " +  "Postion: " + mower._1.position, "Direction: " +mower._1.direction)
-      })
+        mower._1.history ::= (mower._1.position, mower._1.direction)
+      }else {
+        commandList.map(rotationTask => {
+          val rotation = RotationEnum.withName(rotationTask)
+          mower._1.rotate(rotation)
+          mower._1.history ::= (mower._1.position, mower._1.direction)
+          println("New state => " +  "Postion: " + mower._1.position, "Direction: " +mower._1.direction)
+        })
+      }
     }
     }
   })
   println("********** Summary ***********")
   lawn.toString()
-
-}
+ }
